@@ -15,6 +15,7 @@
  */
 package stepsdesign;
 
+import io.cdap.e2e.pages.actions.CdfLogActions;
 import io.cdap.e2e.pages.actions.CdfPipelineRunAction;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.pages.locators.CdfSchemaLocators;
@@ -40,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,9 +170,43 @@ public class PipelineSteps implements CdfHelper {
     CdfStudioLocators.runtimeArgsValue(runtimeArgumentKey).sendKeys(PluginPropertyUtils.pluginProp(value));
   }
 
+  @Then("Enter runtime argument value from github secret {string} for key {string}")
+  public void enterRuntimeArgumentValueFromGithubSecretForKey(String githubSecretKey, String runtimeArgumentKey) {
+    ElementHelper.sendKeys(CdfStudioLocators.runtimeArgsValue(runtimeArgumentKey),
+                           System.getenv(PluginPropertyUtils.pluginProp(githubSecretKey)));
+  }
+
   @Then("Run the preview of pipeline with runtime arguments")
   public void previewAndRunThePipelineWithRuntimeArguments() {
     CdfStudioActions.clickPreviewConfigRunButton();
+  }
+
+  @Then("Wait till pipeline preview is in running state")
+  public void waitTillPipelinePreviewIsInRunningState() {
+    WaitHelper.waitForElementToBeDisplayed(CdfStudioLocators.statusBannerText, 300).getText();
+  }
+
+  @Then("Open and capture pipeline preview logs")
+  public void openAndCapturePipelinePreviewLogs() {
+    ElementHelper.clickIfDisplayed(CdfStudioLocators.statusBannerCloseButton);
+    CdfStudioActions.clickPreviewLogsButton();
+    String message = "---------------------------------------------------------------------------------------" +
+      "PIPELINE PREVIEW RUN LOGS" +
+      "---------------------------------------------------------------------------------------";
+    try {
+      CdfLogActions.writeRawLogsToFile(BeforeActions.file, message);
+    } catch (Exception e) {
+      BeforeActions.scenario.write("Exception in capturing logs : " + e);
+    }
+  }
+
+  @Then("Verify the preview run of pipeline is {string}")
+  public void verifyThePreviewRunOfPipelineIs(String previewStatus) {
+    if (previewStatus.equalsIgnoreCase("success")) {
+      AssertionHelper.verifyElementDisplayed(CdfLogActions.cdfLogLocators.validateSucceeded);
+    } else if (previewStatus.equalsIgnoreCase("failed")) {
+      AssertionHelper.verifyElementDisplayed(CdfLogActions.cdfLogLocators.validateFailed);
+    }
   }
 
   @Then("Verify the preview of pipeline is {string}")
@@ -183,6 +217,11 @@ public class PipelineSteps implements CdfHelper {
     if (!previewStatus.equalsIgnoreCase("failed")) {
       WaitHelper.waitForElementToBeHidden(CdfStudioLocators.statusBanner);
     }
+  }
+
+  @Then("Close the preview logs")
+  public void closeThePreviewLogs() {
+    CdfLogActions.closeLogs();
   }
 
   @Then("Verify preview output schema matches the outputSchema captured in properties")
@@ -256,11 +295,12 @@ public class PipelineSteps implements CdfHelper {
 
   @Then("Open and capture logs")
   public void openAndCaptureLogs() {
+    CdfPipelineRunAction.logsClick();
+    String message = "---------------------------------------------------------------------------------------" +
+      "DEPLOYED PIPELINE RUNTIME LOGS" +
+      "---------------------------------------------------------------------------------------";
     try {
-      CdfPipelineRunAction.logsClick();
-      BeforeActions.scenario.write(CdfPipelineRunAction.captureRawLogs());
-      PrintWriter out = new PrintWriter(BeforeActions.file);
-      out.println(CdfPipelineRunAction.captureRawLogs());
+      CdfLogActions.writeRawLogsToFile(BeforeActions.file, message);
     } catch (Exception e) {
       BeforeActions.scenario.write("Exception in capturing logs : " + e);
     }

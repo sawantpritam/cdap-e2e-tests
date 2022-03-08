@@ -173,4 +173,8 @@ public class CdfStudioActions {
   public static void clickPreviewRunButton() {
     CdfStudioLocators.runButton.click();
   }
+
+  public static void clickPreviewLogsButton() {
+    CdfStudioLocators.previewLogsButton.click();
+  }
 }

@@ -19,6 +19,12 @@ package io.cdap.e2e.pages.actions;
 import io.cdap.e2e.pages.locators.CdfLogLocators;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumHelper;
+import stepsdesign.BeforeActions;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /**
  * Represents CdfLogActions
@@ -68,5 +74,20 @@ public class CdfLogActions {
 
   public static void closeLogs() {
     cdfLogLocators.closeLogs.click();
+  }
+
+  public static void writeRawLogsToFile(File file, String message) throws FileNotFoundException {
+    String rawLogs = CdfPipelineRunAction.captureRawLogs();
+    BeforeActions.scenario.write(message);
+    BeforeActions.scenario.write(rawLogs);
+    PrintWriter out;
+    if (file.exists()) {
+      out = new PrintWriter(new FileOutputStream(file, true));
+    } else {
+      out = new PrintWriter(file);
+    }
+    out.println(message);
+    out.println(rawLogs);
+    out.close();
   }
 }
