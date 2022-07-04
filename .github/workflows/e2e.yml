@@ -54,6 +54,7 @@ jobs:
           echo "${{ github.event.action }}"
           echo "${{ github.event_name }}"
           echo "${{ github.event.pull_request.merged }}"
+          echo "${{ github.event.head_commit.message }}"
       - name: Run all e2e tests
         if: github.event_name == 'workflow_dispatch' || (contains( github.event.head_commit.message, 'Merge pull request'))
         run: >
@@ -61,3 +62,4 @@ jobs:
           echo "${{ github.event.action }}"
           echo "${{ github.event_name }}"
           echo "${{ github.event.pull_request.merged }}"
+          echo "${{ github.event.head_commit.message }}"
