@@ -50,4 +50,5 @@ public class BigQueryActions {
   public static void countTable() {
     logger.info("Count" + BigQueryLocators.countTable.getText());
   }
+  
 }
