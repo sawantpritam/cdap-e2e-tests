@@ -21,6 +21,10 @@ on:
     branches: [ merge-check, merge-test]
     types: [opened, synchronize, reopened, labeled, closed]
   workflow_dispatch:
+  
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }} 
+  cancel-in-progress: true
 
 jobs:
   build:
