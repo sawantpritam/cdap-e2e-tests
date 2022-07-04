@@ -15,11 +15,11 @@
 name: Build e2e tests
 
 on:
+  push:
+    branches: [ merge-check, merge-test ]
   pull_request:
     branches: [ merge-check, merge-test]
     types: [opened, synchronize, reopened, labeled, closed]
-  push:
-    branches: [ merge-check, merge-test ]
   workflow_dispatch:
 
 jobs:
