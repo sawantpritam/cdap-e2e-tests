@@ -61,53 +61,7 @@ jobs:
           echo "${{ github.event.action }}"
           echo "${{ github.event_name }}"
           echo "${{ github.event.pull_request.merged }}"
-      - name: Upload report 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
+      - name: Checkout e2e test repo
+        uses: actions/checkout@v2.3.4
         with:
-          name: Cucumber report
-          path: ./plugin/target/cucumber-reports
-      - name: Upload debug files 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Debug files
-          path: ./**/target/e2e-debug
-      - name: Upload report 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Cucumber report
-          path: ./plugin/target/cucumber-reports
-      - name: Upload debug files 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Debug files
-          path: ./**/target/e2e-debug
-          
-      - name: Upload report 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Cucumber report
-          path: ./plugin/target/cucumber-reports
-      - name: Upload debug files 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Debug files
-          path: ./**/target/e2e-debug
-          
-      - name: Upload report 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Cucumber report
-          path: ./plugin/target/cucumber-reports
-      - name: Upload debug files 
-        uses: actions/upload-artifact@v2.2.4
-        if: always()
-        with:
-          name: Debug files
-          path: ./**/target/e2e-debug
+          path: e2e
