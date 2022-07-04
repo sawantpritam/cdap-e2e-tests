@@ -61,7 +61,23 @@ jobs:
           echo "${{ github.event.action }}"
           echo "${{ github.event_name }}"
           echo "${{ github.event.pull_request.merged }}"
-      - name: Checkout e2e test repo
-        uses: actions/checkout@v2.3.4
-        with:
-          path: e2e
+      - name: Sleep for 30 seconds
+        run: sleep 60s
+        shell: bash
+      - name: Run required e2e tests
+        if: ${{ github.event_name != 'workflow_dispatch' && github.event.pull_request.merged == false}}
+        run: >
+          echo "run required"
+          echo "${{ github.event.action }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.event.pull_request.merged }}"
+      - name: Run all e2e tests
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true}}
+        run: >
+          echo "run all"
+          echo "${{ github.event.action }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.event.pull_request.merged }}"
+      - name: Sleep for 30 seconds
+        run: sleep 60s
+        shell: bash
