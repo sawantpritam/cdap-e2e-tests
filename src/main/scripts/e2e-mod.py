@@ -48,13 +48,16 @@ process.communicate()
 os.chdir("plugin")
 module_to_build : str = sys.argv[1]
 print(f"Building plugin {module_to_build}")
-run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
+#run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
 
 # Get plugin artifact name and version from pom.xml.
 os.chdir(f"{module_to_build}")
 root = ET.parse('pom.xml').getroot()
 plugin_name = root.find('{http://maven.apache.org/POM/4.0.0}artifactId').text
 plugin_version = root.find('{http://maven.apache.org/POM/4.0.0}version').text
+
+print(f"plugin_name {plugin_name}")
+print(f"plugin_version {plugin_version}")
 
 os.chdir("target")
 plugin_properties = {}
