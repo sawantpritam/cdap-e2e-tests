@@ -42,13 +42,13 @@ my_env["_JAVA_OPTIONS"] = "-Xmx24G"
 sandbox_start_cmd = "sandbox/" + sandbox_dir + "/bin/cdap sandbox restart"
 process = subprocess.Popen(sandbox_start_cmd, shell=True, env=my_env)
 process.communicate()
-#assert process.returncode == 0
+assert process.returncode == 0
 
 # Build the plugin
 os.chdir("plugin")
 module_to_build : str = sys.argv[1]
 print(f"Building plugin {module_to_build}")
-#run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
+run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
 
 # Get plugin version from parent pom.xml.
 root = ET.parse('pom.xml').getroot()
