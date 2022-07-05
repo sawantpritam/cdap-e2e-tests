@@ -50,11 +50,14 @@ module_to_build : str = sys.argv[1]
 print(f"Building plugin {module_to_build}")
 #run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
 
-# Get plugin artifact name and version from pom.xml.
+# Get plugin version from parent pom.xml.
+root = ET.parse('pom.xml').getroot()
+plugin_version = root.find('{http://maven.apache.org/POM/4.0.0}version').text
+
+# Get plugin artifact name from module pom.xml.
 os.chdir(f"{module_to_build}")
 root = ET.parse('pom.xml').getroot()
 plugin_name = root.find('{http://maven.apache.org/POM/4.0.0}artifactId').text
-plugin_version = root.find('{http://maven.apache.org/POM/4.0.0}version').text
 
 print(f"plugin_name {plugin_name}")
 print(f"plugin_version {plugin_version}")
