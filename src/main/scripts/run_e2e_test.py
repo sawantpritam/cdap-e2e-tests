@@ -122,6 +122,7 @@ try:
             #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build} -DTEST_RUNNER={testrunner_to_run}")
         else:
             #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build}")
+            print("else")
     else:
         if test_runner_run != "":
             print("TestRunner to run : " + testrunner_to_run)
