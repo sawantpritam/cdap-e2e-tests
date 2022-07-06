@@ -74,8 +74,8 @@ if module_to_build != "":
 else:
     plugin_name = root.find('{http://maven.apache.org/POM/4.0.0}artifactId').text
     
-print("plugin_name - "plugin_name)
-print("plugin_version - "plugin_version)
+print("plugin_name - "+plugin_name)
+print("plugin_version - "+plugin_version)
 
 #os.chdir("target")
 #plugin_properties = {}
