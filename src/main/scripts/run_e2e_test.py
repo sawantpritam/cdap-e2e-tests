@@ -49,7 +49,7 @@ my_env["_JAVA_OPTIONS"] = "-Xmx24G"
 sandbox_start_cmd = "sandbox/" + sandbox_dir + "/bin/cdap sandbox restart"
 process = subprocess.Popen(sandbox_start_cmd, shell=True, env=my_env)
 process.communicate()
-assert process.returncode == 0
+#assert process.returncode == 0
 
 module_to_build = ""
 if args.module:
@@ -59,7 +59,7 @@ if args.module:
 os.chdir("plugin")
 if module_to_build != "":
     print(f"Building plugin module: {module_to_build}")
-    run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
+    #run_shell_command(f"mvn clean package -pl {module_to_build} -am -DskipTests")
 else:
     print("Building plugin")
     run_shell_command("mvn clean package -DskipTests")
@@ -73,29 +73,32 @@ if module_to_build != "":
     plugin_name = root.find('{http://maven.apache.org/POM/4.0.0}artifactId').text
 else:
     plugin_name = root.find('{http://maven.apache.org/POM/4.0.0}artifactId').text
+    
+print("plugin_name - "plugin_name)
+print("plugin_version - "plugin_version)
 
-os.chdir("target")
-plugin_properties = {}
-plugin_parents = []
+#os.chdir("target")
+#plugin_properties = {}
+#plugin_parents = []
 # Get plugin properties and parent from plugin json.
-with open(f'{plugin_name}-{plugin_version}.json') as f:
-    obj = json.loads(f.read())
-    plugin_properties = obj['properties']
-    plugin_parents = obj['parents']
+#with open(f'{plugin_name}-{plugin_version}.json') as f:
+ #   obj = json.loads(f.read())
+  #  plugin_properties = obj['properties']
+   # plugin_parents = obj['parents']
 
-data = None
-with open(f'{plugin_name}-{plugin_version}.jar', 'rb') as f:
-    data = f.read()
+#data = None
+#with open(f'{plugin_name}-{plugin_version}.jar', 'rb') as f:
+ #   data = f.read()
 
 # Install the plugin on the sandbox.
 print("Installing plugin")
-res=requests.post(f"http://localhost:11015/v3/namespaces/default/artifacts/{plugin_name}", headers={"Content-Type": "application/octet-stream", "Artifact-Extends": '/'.join(plugin_parents), "Artifact-Version": plugin_version}, data=data)
-assert res.ok or print(res.text)
-res=requests.put(f"http://localhost:11015/v3/namespaces/default/artifacts/{plugin_name}/versions/{plugin_version}/properties", json=plugin_properties)
-assert res.ok or print(res.text)
+#res=requests.post(f"http://localhost:11015/v3/namespaces/default/artifacts/{plugin_name}", headers={"Content-Type": "application/octet-stream", "Artifact-Extends": '/'.join(plugin_parents), "Artifact-Version": plugin_version}, data=data)
+#assert res.ok or print(res.text)
+#res=requests.put(f"http://localhost:11015/v3/namespaces/default/artifacts/{plugin_name}/versions/{plugin_version}/properties", json=plugin_properties)
+#assert res.ok or print(res.text)
 
 if module_to_build != "":
-    os.chdir("../../..")
+    os.chdir("../..")
 else:
     os.chdir("../..")
 print("cwd:", os.getcwd())
@@ -104,7 +107,7 @@ print("ls:", os.listdir())
 # Run e2e tests
 print("Preparing e2e framework")
 os.chdir("e2e")
-run_shell_command("mvn clean install")
+#run_shell_command("mvn clean install")
 print("Running e2e integration tests")
 os.chdir("../plugin")
 
@@ -116,9 +119,9 @@ try:
     if module_to_build != "":
         if test_runner_run != "":
             print("TestRunner to run : " + testrunner_to_run)
-            run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build} -DTEST_RUNNER={testrunner_to_run}")
+            #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build} -DTEST_RUNNER={testrunner_to_run}")
         else:
-            run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build}")
+            #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build}")
     else:
         if test_runner_run != "":
             print("TestRunner to run : " + testrunner_to_run)
