@@ -111,20 +111,20 @@ os.chdir("e2e")
 print("Running e2e integration tests")
 os.chdir("../plugin")
 
-test_runner_run = ""
+testrunner_to_run = ""
 if args.testRunner:
-    test_runner_run = args.testRunner
+    testrunner_to_run = args.testRunner
 
 try:
     if module_to_build != "":
-        if test_runner_run != "":
+        if testrunner_to_run != "":
             print("TestRunner to run : " + testrunner_to_run)
             #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build} -DTEST_RUNNER={testrunner_to_run}")
         else:
             #run_shell_command(f"mvn install -P e2e-tests -pl {module_to_build}")
             print("else")
     else:
-        if test_runner_run != "":
+        if testrunner_to_run != "":
             print("TestRunner to run : " + testrunner_to_run)
             run_shell_command(f"mvn clean install -P e2e-tests -DTEST_RUNNER={testrunner_to_run}")
         else:
